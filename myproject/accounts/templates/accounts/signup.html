@@ -1,0 +1,31 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+
+{% if error %}
+{{ error }}
+<br />
+<br />
+{% endif %}
+
+<h1>Đăng Ký</h1>
+
+<form method="POST" action="{% url 'signup' %}">
+{% csrf_token %}
+Tên đăng nhập:
+<br />
+<input type="text" name="username" />
+<br />
+Mật khẩu:
+<br />
+<input type="password" name="password1" />
+<br />
+Mật khẩu (xác thực):
+<br />
+<input type="password" name="password2" />
+<br />
+<br />
+<input class="btn btn-primary" type="submit" value="Đăng ký" />
+</form>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+
+{% if error %}
+{{ error }}
+<br />
+<br />
+{% endif %}
+
+<h1>Đăng nhập</h1>
+
+<form method="POST" action="{% url 'login' %}">
+{% csrf_token %}
+Tên đăng nhập:
+<br />
+<input type="text" name="username" />
+<br />
+Mật khẩu:
+<br />
+<input type="password" name="password" />
+<br />
+<br />
+<input class="btn btn-primary" type="submit" value="Đăng nhập" />
+</form>
+
+{% endblock %}

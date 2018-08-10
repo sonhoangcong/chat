@@ -1,0 +1,79 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+
+{% load staticfiles %}
+
+<html>
+  <head>
+    <title>Notifier</title>
+    
+  </head>
+    <link rel="stylesheet" href="/static/layout.css"/>
+  <body>
+  <div id="wrapper">
+    <div id="chatForm">
+      <div id="left">
+        <div id="boxTitle">Users Online</div>
+        <div id="boxContent">
+          <div class="useronline">ABC</div>
+          <div class="useronline">ABC</div>  
+          <div class="useronline">ABC</div>  
+          <div class="useronline">ABC</div>    
+        </div>       
+      </div>
+      <div id="right">
+        <div id="sayHi">Hello <span id="currentUser">ABC</span></div>
+        <div id="listMessages">
+        </div>
+
+        <input type="text" id="txtMessage" onfocusin="myFunction()">
+        <input type="button" id="btnSendMessage" value="Send" class="btn btn-primary">
+      </div>
+      
+    </div>
+   </div>
+  </body>
+</html>
+
+<script>
+console.log(window.location)
+var socket = new WebSocket('ws://' + window.location.host + window.location.pathname);
+var chatHolder = document.querySelector('#listMessages');
+
+socket.onmessage = function(e){
+  console.log("message", e)
+  var chatDataMsg = JSON.parse(e.data)
+  chatHolder.append("<div class='ms'>" + chatDataMsg.username + " : " + chatDataMsg.message +"</div>")
+}
+
+document.querySelector('#txtMessage').focus();
+document.querySelector('#txtMessage').onkeyup = function(e) {
+  if (e.keyCode === 13) {  // enter, return
+    document.querySelector('#btnSendMessage').click();
+  }
+};
+
+document.querySelector('#btnSendMessage').onclick = function(e) {
+        var messageInputDom = document.querySelector('#txtMessage');
+        var message = messageInputDom.value;
+        socket.send(JSON.stringify({
+            'message': message
+        }));
+
+        messageInputDom.value = '';
+        document.querySelector('#txtMessage').focus();
+    };
+
+function myFunction(){
+}
+socket.onerror = function(e){
+  console.log("message", e)
+}
+
+socket.onclose = function(e){
+  console.error('Chat socket closed unexpectedly')
+}
+</script>
+
+{% endblock %}
